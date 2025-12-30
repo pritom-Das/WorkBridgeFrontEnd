@@ -1,4 +1,5 @@
 "use client";
+import Title from "@/components/Title";
 import { useState } from "react";
 import z from "zod";
 
@@ -30,8 +31,8 @@ export default function VendorPage() {
 
   return (
     <div>
-      <h2>Vendor Login</h2>
-      <form onSubmit={handleSubmit}>
+       <Title text="Vendor Login"/>
+      <form onSubmit={handleSubmit} style={{textAlign: 'center', marginTop: '160px'}}>
         <div>
           <label>Email: </label>
           <input type="email" name="email" style={{ border: '1px solid #ccc' }}/> 

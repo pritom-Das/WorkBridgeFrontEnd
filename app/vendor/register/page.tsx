@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { z } from "zod";
 import Footer from "@/components/footer";
+import Title from "@/components/Title";
  
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name is too short" }),
@@ -37,8 +38,8 @@ export default function VendorRegister() {
 
   return (
     <div>
-      <h2>Vendor Registration</h2>
-      <form onSubmit={handleSubmit}>
+      <Title text="Vendor Registration" />
+      <form onSubmit={handleSubmit} style={{textAlign: 'center', marginTop: '160px'}}>
  
         <div>
           <label>Name: </label>
