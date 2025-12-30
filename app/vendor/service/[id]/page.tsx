@@ -3,7 +3,7 @@
 import Title from "@/components/Title";
 import { useParams } from "next/navigation"; 
 
-export default function LibrarianPage() {
+export default function VendorServicePage() {
   const { id } = useParams();
 
   return (
