@@ -11,6 +11,14 @@ const registerSchema = z.object({
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
   address: z.string().min(5, { message: "Address is required" }),
   phone: z.string().min(11, { message: "Phone number must be at least 11 digits" }),
+    gender: z.string().refine(
+    (val) => ['male', 'female', 'other'].includes(val),
+    { message: "Please select a valid gender" }
+  ),
+    role: z.string().refine(
+    (val) => ['customer', 'vendor'].includes(val),
+    { message: "Please select a valid role" }
+  )
 });
  
 export default function VendorRegister() {
@@ -77,7 +85,29 @@ export default function VendorRegister() {
         </div>
         <br />
 
- 
+        <div>
+          <label>Gender: </label>
+          <select name="gender" style={{ border: '1px solid #ccc' }}>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          {error.gender && <span style={{ color: 'red' }}> {error.gender}</span>}
+        </div>
+        <br />
+
+        <div>
+          <label>Role: </label>
+          <select name="role" style={{ border: '1px solid #ccc' }}>
+            <option value="">Select Role</option>
+            <option value="customer">Customer</option>
+            <option value="vendor">Vendor</option>
+          </select>
+          {error.role && <span style={{ color: 'red' }}> {error.role}</span>}
+        </div>
+        <br />
+
         <button type="submit" className="login-btn">Register</button>
       </form>
       <div>
