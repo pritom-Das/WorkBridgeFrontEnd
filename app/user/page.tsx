@@ -1,4 +1,4 @@
-import Title from "@/components/Title";
+import Title from "@/components/title";
 
 export default function UserPage() {
 return (
