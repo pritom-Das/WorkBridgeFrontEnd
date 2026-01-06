@@ -18,6 +18,7 @@ export default function VendorRegister() {
   const [error, setError] = useState<any>({}); 
   const [serverError, setServerError] = useState("");
   const router = useRouter();
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -37,16 +38,12 @@ export default function VendorRegister() {
     setError({});
     setServerError("");
 
-    try {
-      // Send data to backend POST /vendors
-      const response = await axiosInstance.post('/vendors', result.data);
-      
-      if (response.status === 201 || response.status === 200) {
+    try { 
+      const response = await axiosInstance.post('/vendors', result.data); 
         alert("Registration Successful!");
-        router.push("/vendor/login"); // Redirect to login page on success
-      }
-    } catch (err: any) {
-      // Show error message if insertion fails
+        router.push("/vendor/login");   
+
+    } catch (err: any) { 
       setServerError(err.response?.data?.message || "An error occurred during registration.");
     }
   };

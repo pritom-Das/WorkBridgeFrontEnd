@@ -33,15 +33,11 @@ export default function VendorPage() {
 
     try {
       // POST to /vendors/login
-      const response = await axiosInstance.post('/vendors/login', result.data);
-      
-      if (response.status === 200 || response.status === 201) {
-        // Redirect to dummy dashboard page
+      const response = await axiosInstance.post('/vendors/login', result.data); 
         alert("Login Successful!");
         router.push("/vendor/dashBoard");
-      }
-    } catch (err: any) {
-      // Show error messages for invalid credentials or server issues
+       
+    } catch (err: any) { 
       setAuthError(err.response?.data?.message || "Invalid Email or Password");
     }
   };
