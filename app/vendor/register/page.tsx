@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
+import axiosInstance from "@/app/(util)/axios";
 import Footer from "@/components/footer";
-import Title from "@/components/Title";
- 
+import Title from "@/components/title";
+
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name is too short" }),
   email: z.string().email({ message: "Invalid email address" }),
@@ -13,9 +16,10 @@ const registerSchema = z.object({
 });
 
 export default function VendorRegister() {
-  const [error, setError] = useState<any>({});
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [error, setError] = useState<any>({}); 
+  const [serverError, setServerError] = useState("");
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
@@ -23,7 +27,7 @@ export default function VendorRegister() {
     const result = registerSchema.safeParse(data);
 
     if (!result.success) {
-      const err: any = {}; 
+      const err: any = {};
       result.error.issues.forEach((i) => {
         err[i.path[0]] = i.message;
       });
@@ -32,56 +36,69 @@ export default function VendorRegister() {
     }
 
     setError({});
-    console.log("Register Success:", result.data);
-    alert("Registration Successful!");
+    setServerError("");
+
+    try {
+      // Send data to backend POST /vendors
+      const response = await axiosInstance.post('/vendors', result.data);
+      
+      if (response.status === 201 || response.status === 200) {
+        alert("Registration Successful!");
+        router.push("/vendor/login"); // Redirect to login page on success
+      }
+    } catch (err: any) {
+      // Show error message if insertion fails
+      setServerError(err.response?.data?.message || "An error occurred during registration.");
+    }
   };
 
   return (
     <div>
       <Title text="Vendor Registration" />
-      <form onSubmit={handleSubmit} style={{textAlign: 'center', marginTop: '160px'}}>
- 
+      {serverError && <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>{serverError}</p>}
+      
+      <form onSubmit={handleSubmit} style={{ textAlign: 'center', marginTop: '160px' }}>
         <div>
           <label>Name: </label>
           <input type="text" name="name" style={{ border: '1px solid #ccc' }} />
           {error.name && <span style={{ color: 'red' }}> {error.name}</span>}
         </div>
         <br />
- 
+
         <div>
           <label>Email: </label>
           <input type="email" name="email" style={{ border: '1px solid #ccc' }} />
           {error.email && <span style={{ color: 'red' }}> {error.email}</span>}
         </div>
         <br />
- 
+
         <div>
           <label>Password: </label>
           <input type="password" name="password" style={{ border: '1px solid #ccc' }} />
           {error.password && <span style={{ color: 'red' }}> {error.password}</span>}
         </div>
         <br />
- 
+
         <div>
           <label>Address: </label>
           <input type="text" name="address" style={{ border: '1px solid #ccc' }} />
           {error.address && <span style={{ color: 'red' }}> {error.address}</span>}
         </div>
         <br />
- 
+
         <div>
           <label>Phone: </label>
           <input type="text" name="phone" style={{ border: '1px solid #ccc' }} />
           {error.phone && <span style={{ color: 'red' }}> {error.phone}</span>}
         </div>
-        <br /> 
+        <br />
 
         <button type="submit" className="login-btn">Register</button>
       </form>
-      <div> 
+      
+      <div style={{ marginTop: '20px' }}>
         <Footer />
       </div>
     </div>
-    
   );
 }

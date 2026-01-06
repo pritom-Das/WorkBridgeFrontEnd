@@ -1,9 +1,9 @@
 "use client";
 
-import Title from "@/components/Title";
+import Title from "@/components/title";
 import { useParams } from "next/navigation"; 
 
-export default function LibrarianPage() {
+export default function VendorServicePage() {
   const { id } = useParams();
 
   return (

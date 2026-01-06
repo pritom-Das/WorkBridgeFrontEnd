@@ -1,8 +1,8 @@
-import Title from "@/components/Title";
+import Title from "@/components/title";
 
  
 
-export default function LibrarianPage() {
+export default function VendorServiceDashboard() {
   return (
     <div>
       <Title text="Vendor Dashboard" />

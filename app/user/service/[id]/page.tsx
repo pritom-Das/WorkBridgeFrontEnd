@@ -1,6 +1,6 @@
 "use client";
 
-import Title from "@/components/Title";
+import Title from "@/components/title";
 import { useParams } from "next/navigation"; 
 
 export default function ServicePage() {

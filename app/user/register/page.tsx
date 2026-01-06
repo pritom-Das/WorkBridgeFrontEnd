@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { z } from "zod";
 import Footer from "@/components/footer";
-import Title from "@/components/Title";
+import Title from "@/components/title";
  
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name is too short" }),
