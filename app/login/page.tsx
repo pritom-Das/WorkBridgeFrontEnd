@@ -31,8 +31,7 @@ export default function AdminLoginPage() {
     return "";
   };
 
-  // Submit login
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationError = validateForm();
@@ -42,17 +41,26 @@ export default function AdminLoginPage() {
     }
 
     try {
-      // Send login request to backend
-      const res = await axios.post("http://localhost:3000/admin/login", {
-        email: formData.email.trim(),
-        password: formData.password.trim(),
-      });
+      const res = await axios.post(
+        "http://localhost:3000/admin/login", 
+        {
+          email: formData.email.trim(),
+          password: formData.password.trim(),
+        },
+        { 
+          withCredentials: true 
+        }
+      );
 
       console.log("Login successful:", res.data);
-      router.push("/");
+
+      // 1. SAVE the role so the Navbar can find it
+      localStorage.setItem("userRole", res.data.role); 
+
+      // 2. REDIRECT using window.location to force Navbar to refresh
+      window.location.href = "/admin/vendors"; 
 
     } catch (error: any) {
-      console.log("Login error:", error.response?.data);
       setErrorMessage(
         error.response?.data?.message || "Invalid email or password"
       );
