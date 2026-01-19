@@ -1,7 +1,9 @@
 @import "tailwindcss"; 
 @plugin "daisyui";
 
-
+.min-h-screen {
+  min-height: 74vh;
+}
 /* 
 :root {
   --background: #ffffff;
