@@ -1,11 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-<<<<<<< HEAD
-import Title from "@/components/title";
-=======
->>>>>>> vendor
 import axiosInstance from "@/app/(util)/axios";
 import z from "zod";
 import Link from "next/link";
@@ -96,8 +93,7 @@ export default function VendorPage() {
           </button>
 
           {/* Link Moved Inside Here */}
-          <div className="text-center mt-4 text-sm">
-            Don't have an account?{" "}
+          <div className="text-center mt-4 text-sm">Don't have an account?{" "}
             <Link href="/vendor/register" className="link link-primary">
               Register here
             </Link>

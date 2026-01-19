@@ -4,12 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import axiosInstance from "@/app/(util)/axios";
-<<<<<<< HEAD
-import Footer from "@/components/footer";
-import Title from "@/components/title";
-=======
 import Link from "next/link"; // Added for navigation
->>>>>>> vendor
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name is too short" }),
