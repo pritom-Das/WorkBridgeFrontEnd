@@ -49,52 +49,79 @@ export default function VendorRegister() {
   };
 
   return (
-    <div>
-      <Title text="Vendor Registration" />
-      {serverError && <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>{serverError}</p>}
-      
-      <form onSubmit={handleSubmit} style={{ textAlign: 'center', marginTop: '160px' }}>
-        <div>
-          <label>Name: </label>
-          <input type="text" name="name" style={{ border: '1px solid #ccc' }} />
-          {error.name && <span style={{ color: 'red' }}> {error.name}</span>}
-        </div>
-        <br />
+  <div className="flex flex-col items-center justify-center min-h-screen py-10 " data-theme="light">
+    
+    {/* Form Container */}
+    <form onSubmit={handleSubmit}>
+      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-80 border p-4">
+        <legend className="fieldset-legend text-2xl">Vendor Registration</legend>
 
-        <div>
-          <label>Email: </label>
-          <input type="email" name="email" style={{ border: '1px solid #ccc' }} />
-          {error.email && <span style={{ color: 'red' }}> {error.email}</span>}
-        </div>
-        <br />
+        {/* Server Error Message */}
+        {serverError && (
+          <div className="text-error text-sm text-center mb-2">
+            {serverError}
+          </div>
+        )}
 
-        <div>
-          <label>Password: </label>
-          <input type="password" name="password" style={{ border: '1px solid #ccc' }} />
-          {error.password && <span style={{ color: 'red' }}> {error.password}</span>}
-        </div>
-        <br />
+        {/* Name Field */}
+        <label className="label">Name</label>
+        <input 
+          type="text" 
+          name="name" 
+          className="input w-full" 
+          placeholder="Vendor Name" 
+        />
+        {error.name && <span className="text-error text-xs mt-1">{error.name}</span>}
 
-        <div>
-          <label>Address: </label>
-          <input type="text" name="address" style={{ border: '1px solid #ccc' }} />
-          {error.address && <span style={{ color: 'red' }}> {error.address}</span>}
-        </div>
-        <br />
+        {/* Email Field */}
+        <label className="label">Email</label>
+        <input 
+          type="email" 
+          name="email" 
+          className="input w-full" 
+          placeholder="Email Address" 
+        />
+        {error.email && <span className="text-error text-xs mt-1">{error.email}</span>}
 
-        <div>
-          <label>Phone: </label>
-          <input type="text" name="phone" style={{ border: '1px solid #ccc' }} />
-          {error.phone && <span style={{ color: 'red' }}> {error.phone}</span>}
-        </div>
-        <br />
+        {/* Password Field */}
+        <label className="label">Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          className="input w-full" 
+          placeholder="Password" 
+        />
+        {error.password && <span className="text-error text-xs mt-1">{error.password}</span>}
 
-        <button type="submit" className="login-btn">Register</button>
-      </form>
-      
-      <div style={{ marginTop: '20px' }}>
-        <Footer />
-      </div>
+        {/* Address Field */}
+        <label className="label">Address</label>
+        <input 
+          type="text" 
+          name="address" 
+          className="input w-full" 
+          placeholder="Business Address" 
+        />
+        {error.address && <span className="text-error text-xs mt-1">{error.address}</span>}
+
+        {/* Phone Field */}
+        <label className="label">Phone</label>
+        <input 
+          type="text" 
+          name="phone" 
+          className="input w-full" 
+          placeholder="Phone Number" 
+        />
+        {error.phone && <span className="text-error text-xs mt-1">{error.phone}</span>}
+
+        {/* Submit Button */}
+        <button type="submit" className="btn btn-neutral mt-4 w-full">
+          Register
+        </button>
+      </fieldset>
+    </form>
+
+    <div className="mt-8"> 
     </div>
-  );
+  </div>
+);
 }

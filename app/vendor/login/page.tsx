@@ -20,6 +20,7 @@ export default function VendorPage() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
 
+    // 1. Client-side Validation
     const result = loginSchema.safeParse(data);
     if (!result.success) {
       const err: any = {};
@@ -32,10 +33,19 @@ export default function VendorPage() {
     setAuthError("");
 
     try {
-      // POST to /vendors/login
+      // 2. Axios Request (Login)
       const response = await axiosInstance.post('/vendors/login', result.data); 
-        alert("Login Successful!");
-        router.push("/vendor/dashBoard");
+      
+      // 3. Save Vendor ID to LocalStorage
+      // Note: This relies on your Backend Controller returning { id: 1, ... }
+      if (response.data.id) {
+        localStorage.setItem("vendorId", response.data.id.toString());
+      } else {
+        console.warn("Backend did not return an ID. Dashboard requests may fail.");
+      }
+
+      alert("Login Successful!");
+      router.push("/vendor/dashBoard");
        
     } catch (err: any) { 
       setAuthError(err.response?.data?.message || "Invalid Email or Password");
@@ -43,26 +53,47 @@ export default function VendorPage() {
   };
 
   return (
-    <div>
-      <Title text="Vendor Login" />
-      <form onSubmit={handleSubmit} style={{ textAlign: 'center', marginTop: '160px' }}>
-        {authError && <p style={{ color: 'red', marginBottom: '10px' }}>{authError}</p>}
-        
-        <div>
-          <label>Email: </label>
-          <input type="email" name="email" style={{ border: '1px solid #ccc' }} />
-          {error.email && <span style={{ color: 'red' }}> {error.email}</span>}
-        </div>
-        <br />
-        
-        <div>
-          <label>Password: </label>
-          <input type="password" name="password" style={{ border: '1px solid #ccc' }} />
-          {error.password && <span style={{ color: 'red' }}> {error.password}</span>}
-        </div>
-        <br />
-        
-        <button type="submit" className="login-btn">Login</button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-base-200" data-theme="light">  
+      <form onSubmit={handleSubmit} className="mt-6">
+        <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-80 border p-4">
+          <legend className="fieldset-legend text-2xl">Login</legend>
+
+          {/* Global Auth Error */}
+          {authError && (
+            <div className="text-error text-sm text-center mb-3">
+              {authError}
+            </div>
+          )}
+
+          {/* Email Field */}
+          <div>
+            <label className="label">Email</label>
+            <input 
+              type="email" 
+              name="email" 
+              className="input w-full" 
+              placeholder="Enter your email"
+            />
+          </div> 
+          {error.email && <span className="text-error text-xs mt-1">{error.email}</span>}
+
+          {/* Password Field */}
+          <div>
+            <label className="label">Password</label>
+            <input 
+              type="password" 
+              name="password" 
+              className="input w-full" 
+              placeholder="Enter your password"
+            />
+          </div>
+          {error.password && <span className="text-error text-xs mt-1">{error.password}</span>}
+
+          {/* Submit Button */}
+          <button type="submit" className="btn btn-neutral mt-4 w-full">
+            Login
+          </button>
+        </fieldset>
       </form>
     </div>
   );
