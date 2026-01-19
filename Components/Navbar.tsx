@@ -4,30 +4,52 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
+import Pusher from "pusher-js"; // Import Pusher
+import { FaBell } from "react-icons/fa"; // Import Bell Icon
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [userRole, setUserRole] = useState<string | null>(null);
+  
+  // --- New State for Notifications ---
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     const role = localStorage.getItem("userRole");
     setUserRole(role);
+
+    // --- Pusher Listener Logic ---
+    // Only subscribe if the user is an admin or super-admin
+    if (role === "admin" || role === "super-admin") {
+      const pusher = new Pusher("917780bd81fdea3caf31", {
+        cluster: "ap2",
+      });
+
+      const channel = pusher.subscribe("admin-channel");
+      
+      channel.bind("new-service", (data: any) => {
+        setNotifications((prev) => [data, ...prev]);
+        setUnreadCount((prev) => prev + 1);
+      });
+
+      return () => {
+        pusher.unsubscribe("admin-channel");
+      };
+    }
   }, []);
 
-  // 1. Define links and mark which ones are ONLY for Super Admins
- const allLinks = [
-  { name: "Manage Vendors", path: "/admin/vendors", roles: ["admin", "super-admin"] },
-  { name: "Manage Customers", path: "/admin/customers", roles: ["admin", "super-admin"] },
-  { name: "Manage Services", path: "/admin/services", roles: ["admin", "super-admin"] },
-  { name: "Admins", path: "/admin/add-admin", roles: ["super-admin"] },
-];
+  const allLinks = [
+    { name: "Manage Vendors", path: "/admin/vendors", roles: ["admin", "super-admin"] },
+    { name: "Manage Customers", path: "/admin/customers", roles: ["admin", "super-admin"] },
+    { name: "Manage Services", path: "/admin/services", roles: ["admin", "super-admin"] },
+    { name: "Admins", path: "/admin/add-admin", roles: ["super-admin"] },
+  ];
 
-
-  // 2. Logic: Super Admin sees everything. Admin sees only superOnly: false.
- const filteredLinks = allLinks.filter(
-  (link) => userRole && link.roles.includes(userRole)
-);
+  const filteredLinks = allLinks.filter(
+    (link) => userRole && link.roles.includes(userRole)
+  );
 
   const active = (path: string) =>
     pathname === path ? "font-bold text-primary" : "";
@@ -74,15 +96,52 @@ export default function Navbar() {
         </ul>
       </div>
 
-      <div className="navbar-end">
+      <div className="navbar-end gap-2">
+        {/* --- Notification Bell Section --- */}
+        {userRole && (userRole === "admin" || userRole === "super-admin") && (
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+              <div className="indicator">
+                <FaBell className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <span className="badge badge-xs badge-primary indicator-item">{unreadCount}</span>
+                )}
+              </div>
+            </div>
+            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-64 bg-base-100 shadow-xl border border-base-200">
+              <div className="card-body">
+                <h3 className="font-bold text-sm">Notifications</h3>
+                <div className="max-h-48 overflow-y-auto">
+                  {notifications.length > 0 ? (
+                    notifications.map((n, i) => (
+                      <div key={i} className="py-2 border-b border-base-100 last:border-0 text-xs">
+                        <p className="font-semibold text-primary">{n.message}</p>
+                        <p className="opacity-70">By: {n.vendorName}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="py-2 text-center opacity-50 text-xs">No new updates</p>
+                  )}
+                </div>
+                <button 
+                  onClick={() => setUnreadCount(0)} 
+                  className="btn btn-xs btn-block btn-ghost mt-2"
+                >
+                  Clear Count
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {userRole ? (
           <div className="flex items-center gap-4">
             <div className="hidden md:block text-right">
-                <p className="text-[10px] opacity-50 font-bold uppercase tracking-widest">Role</p>
-                <p className={`text-xs font-bold ${userRole === 'super-admin' ? 'text-secondary' : 'text-primary'}`}>
-                  {userRole.toUpperCase()}
-                </p>
-             </div>
+              <p className="text-[10px] opacity-50 font-bold uppercase tracking-widest">Role</p>
+              <p className={`text-xs font-bold ${userRole === 'super-admin' ? 'text-secondary' : 'text-primary'}`}>
+                {userRole.toUpperCase()}
+              </p>
+            </div>
             <button onClick={handleLogout} className="btn btn-error btn-outline btn-sm">
               Logout
             </button>
