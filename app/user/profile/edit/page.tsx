@@ -152,9 +152,9 @@ return (
           ></textarea>
           {error.address && <span className="text-error text-xs">{error.address}</span>}
 
-          <div className="flex gap-2 mt-6">
+          <div className="flex gap-2 mt-6 justify-between">
             <button type="submit" className="btn btn-primary flex-1">Save Changes</button>
-            <button type="button" onClick={() => router.push("/user/profile")} className="btn">Cancel</button>
+            <button type="button" onClick={() => router.push("/user/profile")} className="btn  btn-soft btn-primary flex-1" >Cancel</button>
           </div>
         </fieldset>
       </form>

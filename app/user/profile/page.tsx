@@ -10,6 +10,27 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+const handleDelete = async () => {
+  const userId = localStorage.getItem("userId");
+  if (!userId) return;
+
+  if (confirm("Are you sure you want to delete your account?")) {
+    try {
+      // 1. Delete from DB
+      await axiosInstance.delete(`/customer/profile/delete/${userId}`);
+      
+      // 2. Clear EVERYTHING from localStorage
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userRole"); // Navbar depends on this!
+      localStorage.clear(); // Safety measure to clear all keys
+      alert("Account deleted successfully.");
+      window.location.href = "/"; 
+    } catch (error) {
+      console.error("Delete failed", error);
+    }
+  }
+};
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -37,16 +58,10 @@ export default function Profile() {
   if (loading) return <div className="p-10 text-center"><span className="loading loading-spinner loading-lg"></span></div>;
 return (
     <div>
-    <Title text="User Dashboard" />
-    <p>User Profile.</p>
+
 
         <div className="min-h-screen bg-base-200 p-8" data-theme="light">
-      {/* Navigation Bar (Simple Version for Profile) */}
-      <div className="mb-8">
-        <Link href="/vendor/dashBoard" className="btn btn-outline">
-          ← Back to Dashboard
-        </Link>
-      </div>
+
  
       <div className="max-w-2xl mx-auto card bg-base-100 shadow-xl">
         <div className="card-body">
@@ -86,7 +101,8 @@ return (
 
            <div className="mt-6 flex space-x-4 justify-between">
             <Link href="/user/profile/edit" className="btn btn-primary mr-2">Edit Profile</Link>
-            <button className="btn btn-secondary">Delete Account</button>
+            <button className="btn btn-secondary" onClick={handleDelete}>
+              Delete Account</button>
            </div>
           </div>
         </div>
