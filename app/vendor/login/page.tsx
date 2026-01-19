@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Title from "@/components/Title";
 import axiosInstance from "@/app/(util)/axios";
 import z from "zod";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -20,7 +20,6 @@ export default function VendorPage() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
 
-    // 1. Client-side Validation
     const result = loginSchema.safeParse(data);
     if (!result.success) {
       const err: any = {};
@@ -33,20 +32,17 @@ export default function VendorPage() {
     setAuthError("");
 
     try {
-      // 2. Axios Request (Login)
       const response = await axiosInstance.post('/vendors/login', result.data); 
       
-      // 3. Save Vendor ID to LocalStorage
-      // Note: This relies on your Backend Controller returning { id: 1, ... }
       if (response.data.id) {
         localStorage.setItem("vendorId", response.data.id.toString());
       } else {
-        console.warn("Backend did not return an ID. Dashboard requests may fail.");
+        console.warn("Backend did not return an ID.");
       }
 
       alert("Login Successful!");
       router.push("/vendor/dashBoard");
-       
+        
     } catch (err: any) { 
       setAuthError(err.response?.data?.message || "Invalid Email or Password");
     }
@@ -55,18 +51,18 @@ export default function VendorPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-base-200" data-theme="light">  
       <form onSubmit={handleSubmit} className="mt-6">
-        <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-80 border p-4">
-          <legend className="fieldset-legend text-2xl">Login</legend>
+        <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-80 border p-4 shadow-sm">
+          <legend className="fieldset-legend text-2xl font-bold">Login</legend>
 
           {/* Global Auth Error */}
           {authError && (
-            <div className="text-error text-sm text-center mb-3">
+            <div className="text-error text-sm text-center mb-3 font-medium">
               {authError}
             </div>
           )}
 
           {/* Email Field */}
-          <div>
+          <div className="w-full">
             <label className="label">Email</label>
             <input 
               type="email" 
@@ -74,11 +70,11 @@ export default function VendorPage() {
               className="input w-full" 
               placeholder="Enter your email"
             />
+            {error.email && <span className="text-error text-xs mt-1 block">{error.email}</span>}
           </div> 
-          {error.email && <span className="text-error text-xs mt-1">{error.email}</span>}
 
           {/* Password Field */}
-          <div>
+          <div className="w-full mt-2">
             <label className="label">Password</label>
             <input 
               type="password" 
@@ -86,13 +82,22 @@ export default function VendorPage() {
               className="input w-full" 
               placeholder="Enter your password"
             />
+            {error.password && <span className="text-error text-xs mt-1 block">{error.password}</span>}
           </div>
-          {error.password && <span className="text-error text-xs mt-1">{error.password}</span>}
 
           {/* Submit Button */}
-          <button type="submit" className="btn btn-neutral mt-4 w-full">
+          <button type="submit" className="btn btn-neutral mt-6 w-full">
             Login
           </button>
+
+          {/* Link Moved Inside Here */}
+          <div className="text-center mt-4 text-sm">
+            Don't have an account?{" "}
+            <Link href="/vendor/register" className="link link-primary">
+              Register here
+            </Link>
+          </div>
+          
         </fieldset>
       </form>
     </div>

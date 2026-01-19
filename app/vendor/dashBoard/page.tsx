@@ -51,17 +51,22 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-base-200" data-theme="light">
+    <div className="min-h-screen bg-base-200"  >
       {/* NAVBAR */}
-      <div className="navbar bg-gray-500 shadow-sm text-white">
+      <div className="navbar  shadow-sm text-white" data-theme="dark">
         <div className="navbar-start">
-          <a className="text-xl px-4 font-bold">Work Bridge</a>
+          <a className="text-3xl px-4 font-bold">Work Bridge</a>
         </div>
         <div className="navbar-center lg:flex">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="menu menu-horizontal px-1 gap-3 ">
             <li>
               <Link href="/vendor/service/create" className="btn btn-outline text-white hover:bg-white hover:text-gray-800">
                 + New Service
+              </Link>
+            </li>
+            <li> 
+              <Link href="/vendor/review" className="btn btn-outline text-white hover:bg-white hover:text-gray-800 " >
+                Review
               </Link>
             </li>
           </ul>
@@ -97,7 +102,7 @@ export default function Dashboard() {
                   <div className="card-actions justify-between items-center mt-4 border-t pt-4">
                     <span className="text-2xl font-bold text-primary">৳ {service.price}</span>
                     <Link href={`/vendor/service/edit/${service.id}`} className="btn btn-sm btn-ghost border-gray-300">Edit Details</Link>
-                  </div>
+                  </div> 
                 </div>
               </div>
             ))}
