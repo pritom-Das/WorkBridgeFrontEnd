@@ -1,6 +1,6 @@
 @import "tailwindcss"; 
 @plugin "daisyui";
-
+/* 
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -38,4 +38,4 @@ body {
 
 .login-btn:hover {
   background-color: #0051a2;  
-}
+} */

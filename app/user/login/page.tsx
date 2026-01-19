@@ -32,24 +32,37 @@ export default function UserPage() {
     setError({});
     setAuthError("");
 
-    try {
-      // POST to /customer/login
-      const response = await axiosInstance.post('/customer/login', result.data);
+        try {
+      // 2. Axios Request (Login)
+      const response = await axiosInstance.post('/customer/login', result.data); 
       
-      if (response.status === 200 || response.status === 201) {
-        // Redirect to dummy dashboard page
-        alert("Login Successful!");
-        router.push("/user");
+      // 3. Save Vendor ID to LocalStorage
+      // Note: This relies on your Backend Controller returning { id: 1, ... }
+      if (response.data.id) {
+        localStorage.setItem("userId", response.data.id.toString());
+      } else {
+        console.warn("Backend did not return an ID. Dashboard requests may fail.");
       }
-    } catch (err: any) {
-      // Show error messages for invalid credentials or server issues
+
+      alert("Login Successful!");
+      router.push("/user");
+       
+    } catch (err: any) { 
       setAuthError(err.response?.data?.message || "Invalid Email or Password");
     }
+
   };
+
+
+
+
+
+
+
  
  return (
     <div>
-      <Title text="Vendor Login" />
+      <Title text="User Login" />
       <form onSubmit={handleSubmit} style={{ textAlign: 'center', marginTop: '160px' }}>
         {authError && <p style={{ color: 'red', marginBottom: '10px' }}>{authError}</p>}
         
