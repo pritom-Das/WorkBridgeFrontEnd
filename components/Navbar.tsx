@@ -8,6 +8,7 @@ import axios from "axios";
 import Pusher from "pusher-js";
 import { FaBell } from "react-icons/fa";
 import axiosInstance from "@/app/(util)/axios";
+import Footer from "./footer";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -147,6 +148,7 @@ export default function Navbar() {
           </div>
         )}
       </div>
+       
     </div>
   );
 }
