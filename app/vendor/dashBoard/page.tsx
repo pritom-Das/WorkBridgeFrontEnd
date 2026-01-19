@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axiosInstance from "@/app/(util)/axios"; 
-import Footer from "@/components/footer";
+import axiosInstance from "@/app/(util)/axios";
+import Footer from "@/components/footer"; // 1. Import Footer
 
 // Interface for type safety
 interface Service {
@@ -44,7 +44,7 @@ export default function Dashboard() {
     try {
       await axiosInstance.post('/vendors/logout');
       localStorage.removeItem("vendorId");
-      router.push("/vendor/login");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed", error);
       router.push("/vendor/login");
@@ -52,7 +52,7 @@ export default function Dashboard() {
   };
 
   return (
-    // Change min-h-screen to flex col so footer stays at bottom
+    // 2. LAYOUT FIX: Use 'flex flex-col' so the page behaves like a column
     <div className="min-h-screen flex flex-col bg-base-200">
       
       {/* NAVBAR */}
@@ -84,7 +84,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* MAIN CONTENT - Grow to fill space */}
+      {/* 3. CONTENT FIX: Add 'flex-grow' to push the footer down */}
       <div className="p-8 max-w-7xl mx-auto w-full flex-grow">
         <h1 className="text-3xl font-bold mb-6 text-gray-700">My Services</h1>
         
@@ -111,7 +111,9 @@ export default function Dashboard() {
             ))}
           </div>
         )}
-      </div> 
+      </div>
+
+      {/* 4. FOOTER: Added at the bottom */}
       <Footer />
     </div>
   );
