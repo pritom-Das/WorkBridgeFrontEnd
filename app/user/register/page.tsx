@@ -2,7 +2,7 @@
  "use client";
 import { useState } from "react";
 import { z } from "zod";
-import Footer from "@/components/footer";
+// import Footer from "@/components/footer";
 import Title from "@/components/title";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/(util)/axios";
@@ -130,7 +130,7 @@ export default function VendorRegister() {
         <button type="submit" className="login-btn">Register</button>
       </form>
       <div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
    
