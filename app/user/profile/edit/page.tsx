@@ -5,6 +5,7 @@ import { z } from "zod";
 import Title from "@/components/title";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/(util)/axios";
+import Navbar from "@/components/Navbar";
 
 // 1. Define the Validation Schema (Similar to Register)
 const updateProfileSchema = z.object({
@@ -86,6 +87,7 @@ export default function EditProfile() {
 
 return (
     <div className="flex flex-col items-center min-h-screen py-10 bg-base-200" data-theme="light">
+      <Navbar />
       <form onSubmit={handleSubmit} className="w-full max-w-md">
         <fieldset className="fieldset bg-base-100 p-6 rounded-box shadow-lg">
           <legend className="fieldset-legend text-2xl font-bold">Edit Profile</legend>
