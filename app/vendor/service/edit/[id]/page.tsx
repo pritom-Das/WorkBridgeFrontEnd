@@ -1,43 +1,64 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { z } from "zod";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import Link from "next/link"; // Import Link for the Back button
 import axiosInstance from "@/app/(util)/axios";
+import { z } from "zod";
 
-// Zod Schema
+// Validation Schema
 const serviceSchema = z.object({
-  title: z.string().min(3, "Service title is too short"),
-  description: z.string().min(10, "Description must be at least 10 chars"),
-  price: z.string().regex(/^\d+$/, "Price must be a number"), 
+  title: z.string().min(3, "Title is too short"),
+  description: z.string().min(10, "Description is too short"),
+  price: z.any(), 
 });
 
-export default function CreateServicePage() {
-  const [error, setError] = useState<any>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [vendorId, setVendorId] = useState<string | null>(null);
+export default function EditServicePage() {
+  const params = useParams();
   const router = useRouter();
+  
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<any>({});
 
+  // 1. Fetch Existing Data
   useEffect(() => {
-    const id = localStorage.getItem("vendorId");
-    
-    if (!id) {
-      alert("Please login first"); 
-      router.push("/vendor/login");
-    } else {
-      setVendorId(id);
-      setIsLoading(false);
-    }
-  }, [router]);
+    const fetchService = async () => {
+      try {
+        const response = await axiosInstance.get(`/vendors/service/${params.id}`);
+        const data = response.data;
+        
+        setFormData({
+          title: data.title,
+          description: data.description,
+          price: data.price,
+        });
+      } catch (err) {
+        console.error("Failed to fetch service", err);
+        alert("Could not load service details");
+        router.push("/vendor/dashBoard");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (params.id) fetchService();
+  }, [params.id, router]);
+
+  // Handle Input Changes
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle Update Submit
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const rawData = Object.fromEntries(formData);
-
-    const result = serviceSchema.safeParse(rawData);
+    
+    // Validate
+    const result = serviceSchema.safeParse(formData);
     if (!result.success) {
       const err: any = {};
       result.error.issues.forEach(i => { err[i.path[0]] = i.message });
@@ -45,33 +66,24 @@ export default function CreateServicePage() {
       return;
     }
 
-    setError({});
-
     try {
-      const payload = { 
-        title: result.data.title,         
-        description: result.data.description,
-        price: Number(result.data.price)  
+      const payload = {
+        ...formData,
+        price: Number(formData.price),
       };
+
+      await axiosInstance.put(`/vendors/service/${params.id}`, payload);
       
-      await axiosInstance.post(`/vendors/${vendorId}/services`, payload);
-      
-      alert("Service Created Successfully!");
+      alert("Service Updated Successfully!");
       router.push("/vendor/dashBoard");
-      
+
     } catch (err: any) {
       console.error(err);
-      alert(err.response?.data?.message || "Failed to create service");
+      alert(err.response?.data?.message || "Failed to update service");
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-base-200">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
+  if (loading) return <div className="p-10 text-center"><span className="loading loading-spinner loading-lg"></span></div>;
 
   return (
     <div className="min-h-screen bg-base-200 p-8" data-theme="light">
@@ -83,10 +95,10 @@ export default function CreateServicePage() {
         </Link>
       </div>
 
-      {/* 2. Main Create Card (Centered & Styled like Edit Page) */}
+      {/* 2. Main Edit Card (Centered) */}
       <div className="flex flex-col items-center">
         <div className="w-full max-w-md bg-base-100 p-8 rounded-box shadow-xl">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Create New Service</h2>
+          <h2 className="text-3xl font-bold mb-6 text-gray-800">Edit Service</h2>
           
           <form onSubmit={handleSubmit}>
             
@@ -99,7 +111,9 @@ export default function CreateServicePage() {
                 name="title" 
                 type="text" 
                 className="input input-bordered w-full bg-white" 
-                placeholder="e.g. AC Repair" 
+                placeholder="e.g. AC Repair"
+                value={formData.title}
+                onChange={handleChange}
               />
               {error.title && <span className="text-error text-xs mt-1">{error.title}</span>}
             </div>
@@ -113,7 +127,9 @@ export default function CreateServicePage() {
                 name="price" 
                 type="number" 
                 className="input input-bordered w-full bg-white" 
-                placeholder="e.g. 500" 
+                placeholder="e.g. 500"
+                value={formData.price}
+                onChange={handleChange}
               />
               {error.price && <span className="text-error text-xs mt-1">{error.price}</span>}
             </div>
@@ -127,13 +143,15 @@ export default function CreateServicePage() {
                 name="description" 
                 className="textarea textarea-bordered h-32 w-full bg-white text-base" 
                 placeholder="Describe the service..."
+                value={formData.description}
+                onChange={handleChange}
               ></textarea>
               {error.description && <span className="text-error text-xs mt-1">{error.description}</span>}
             </div>
 
-            {/* Publish Button */}
+            {/* Update Button */}
             <button type="submit" className="btn btn-primary w-full text-white text-lg font-bold">
-              Publish Service
+              Update Service
             </button>
             
           </form>
