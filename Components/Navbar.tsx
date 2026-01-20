@@ -95,61 +95,98 @@ export default function Navbar() {
           {links}
         </ul>
       </div>
-
-      <div className="navbar-end gap-2">
-        {/* --- Notification Bell Section --- */}
-        {userRole && (userRole === "admin" || userRole === "super-admin") && (
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-              <div className="indicator">
-                <FaBell className="h-5 w-5" />
-                {unreadCount > 0 && (
-                  <span className="badge badge-xs badge-primary indicator-item">{unreadCount}</span>
-                )}
-              </div>
-            </div>
-            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-64 bg-base-100 shadow-xl border border-base-200">
-              <div className="card-body">
-                <h3 className="font-bold text-sm">Notifications</h3>
-                <div className="max-h-48 overflow-y-auto">
-                  {notifications.length > 0 ? (
-                    notifications.map((n, i) => (
-                      <div key={i} className="py-2 border-b border-base-100 last:border-0 text-xs">
-                        <p className="font-semibold text-primary">{n.message}</p>
-                        <p className="opacity-70">By: {n.vendorName}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="py-2 text-center opacity-50 text-xs">No new updates</p>
-                  )}
-                </div>
-                <button 
-                  onClick={() => setUnreadCount(0)} 
-                  className="btn btn-xs btn-block btn-ghost mt-2"
-                >
-                  Clear Count
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {userRole ? (
-          <div className="flex items-center gap-4">
-            <div className="hidden md:block text-right">
-              <p className="text-[10px] opacity-50 font-bold uppercase tracking-widest">Role</p>
-              <p className={`text-xs font-bold ${userRole === 'super-admin' ? 'text-secondary' : 'text-primary'}`}>
-                {userRole.toUpperCase()}
-              </p>
-            </div>
-            <button onClick={handleLogout} className="btn btn-error btn-outline btn-sm">
-              Logout
-            </button>
-          </div>
-        ) : (
-          <Link href="/login" className="btn btn-primary btn-sm px-6">Login</Link>
-        )}
+    {/* nav bar end secction ..............................................  */}
+<div className="navbar-end gap-2">
+  {/* --- 1. Notification Bell Section (Admin Only) --- */}
+  {userRole && (userRole === "admin" || userRole === "super-admin") && (
+    <div className="dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+        <div className="indicator">
+          <FaBell className="h-5 w-5" />
+          {unreadCount > 0 && (
+            <span className="badge badge-xs badge-primary indicator-item">
+              {unreadCount}
+            </span>
+          )}
+        </div>
       </div>
+      <div
+        tabIndex={0}
+        className="mt-3 z-[50] card card-compact dropdown-content w-64 bg-base-100 shadow-xl border border-base-200"
+      >
+        <div className="card-body">
+          <h3 className="font-bold text-sm">Notifications</h3>
+          <div className="max-h-48 overflow-y-auto text-xs">
+            {notifications.length > 0 ? (
+              notifications.map((n, i) => (
+                <div key={i} className="py-2 border-b border-base-100 last:border-0">
+                  <p className="font-semibold text-primary">{n.message}</p>
+                  <p className="opacity-70 text-[10px]">By: {n.vendorName}</p>
+                </div>
+              ))
+            ) : (
+              <p className="py-2 text-center opacity-50">No new updates</p>
+            )}
+          </div>
+          <button
+            onClick={() => setUnreadCount(0)}
+            className="btn btn-xs btn-block btn-ghost mt-2"
+          >
+            Clear Count
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {/* --- 2. User Info & Logout OR Login Dropdown --- */}
+  {userRole ? (
+    <div className="flex items-center gap-4">
+      <div className="hidden md:block text-right">
+        <p className="text-[10px] opacity-50 font-bold uppercase tracking-widest">
+          Role
+        </p>
+        <p
+          className={`text-xs font-bold ${
+            userRole === "super-admin" ? "text-secondary" : "text-primary"
+          }`}
+        >
+          {userRole.toUpperCase()}
+        </p>
+      </div>
+      <button
+        onClick={handleLogout}
+        className="btn btn-error btn-outline btn-sm"
+      >
+        Logout
+      </button>
+    </div>
+  ) : (
+    /* --- 3. Multi-Login Dropdown --- */
+    <div className="dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="btn btn-primary btn-sm px-6">
+        Login
+      </div>
+      <ul
+        tabIndex={0}
+        className="dropdown-content z-[50] menu p-2 shadow-2xl bg-base-100 rounded-box w-52 border border-base-200 mt-2"
+      >
+        <li className="menu-title text-xs uppercase opacity-50 px-4 py-2">
+          Choose Account Type
+        </li>
+        <li>
+          <Link href="/login">Admin Portal</Link>
+        </li>
+        <li>
+          <Link href="/vendor/login">Vendor Portal</Link>
+        </li>
+        <li>
+          <Link href="/customer/login">Customer Portal</Link>
+        </li>
+      </ul>
+    </div>
+  )}
+</div>
     </div>
   );
 }
