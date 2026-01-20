@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import Link from "next/link"; // Import Link for the Back button
+import Link from "next/link";  
 import axiosInstance from "@/app/(util)/axios";
 import { z } from "zod";
-
-// Validation Schema
+ 
 const serviceSchema = z.object({
   title: z.string().min(3, "Title is too short"),
   description: z.string().min(10, "Description is too short"),
@@ -23,8 +23,7 @@ export default function EditServicePage() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>({});
-
-  // 1. Fetch Existing Data
+ 
   useEffect(() => {
     const fetchService = async () => {
       try {
@@ -47,17 +46,14 @@ export default function EditServicePage() {
 
     if (params.id) fetchService();
   }, [params.id, router]);
-
-  // Handle Input Changes
+ 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  // Handle Update Submit
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate
+     
     const result = serviceSchema.safeParse(formData);
     if (!result.success) {
       const err: any = {};
@@ -88,14 +84,13 @@ export default function EditServicePage() {
   return (
     <div className="min-h-screen bg-base-200 p-8" data-theme="light">
       
-      {/* 1. Back to Dashboard Button (Top Left) */}
+     
       <div className="mb-8">
         <Link href="/vendor/dashBoard" className="btn btn-outline bg-white">
           ← Back to Dashboard
         </Link>
       </div>
-
-      {/* 2. Main Edit Card (Centered) */}
+ 
       <div className="flex flex-col items-center">
         <div className="w-full max-w-md bg-base-100 p-8 rounded-box shadow-xl">
           <h2 className="text-3xl font-bold mb-6 text-gray-800">Edit Service</h2>

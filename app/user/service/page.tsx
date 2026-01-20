@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/(util)/axios";
+import Navbar from "@/components/Navbar";
 
 // Interface for type safety (Optional but good practice)
 interface Service {
@@ -44,6 +45,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-base-200"  >
+       <Navbar />
       {/* MAIN CONTENT - SERVICE CARDS */}
       <div className="p-8 max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-gray-700">My Services</h1>

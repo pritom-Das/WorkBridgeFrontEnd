@@ -1,13 +1,12 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { z } from "zod";
 import axiosInstance from "@/app/(util)/axios";
-
-// Zod Schema
+ 
 const serviceSchema = z.object({
   title: z.string().min(3, "Service title is too short"),
   description: z.string().min(10, "Description must be at least 10 chars"),
@@ -75,15 +74,13 @@ export default function CreateServicePage() {
 
   return (
     <div className="min-h-screen bg-base-200 p-8" data-theme="light">
-      
-      {/* 1. Back to Dashboard Button (Top Left) */}
+       
       <div className="mb-8">
         <Link href="/vendor/dashBoard" className="btn btn-outline bg-white">
           ← Back to Dashboard
         </Link>
       </div>
-
-      {/* 2. Main Create Card (Centered & Styled like Edit Page) */}
+ 
       <div className="flex flex-col items-center">
         <div className="w-full max-w-md bg-base-100 p-8 rounded-box shadow-xl">
           <h2 className="text-3xl font-bold mb-6 text-gray-800">Create New Service</h2>

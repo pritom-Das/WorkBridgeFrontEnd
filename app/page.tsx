@@ -2,70 +2,66 @@
 
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade } from "swiper/modules";
-
-// Import Swiper styles
+import { Autoplay, EffectFade } from "swiper/modules"; 
 import "swiper/css";
 import "swiper/css/autoplay";
-import "swiper/css/effect-fade";
+import "swiper/css/effect-fade";  // Ensure casing matches your file
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/footer";
 
-const Banner = () => {
-  // Use the exact names from your public/images folder
+const Home = () => {
   const images = [
     "/images/banner1.jpg",
     "/images/banner2.jpg",
     "/images/banner3.jpg",
   ];
 
-
-
   return (
-    <div className="relative w-full h-[550px] overflow-hidden">
-      {/* Background Slider */}
-      <Swiper
-        modules={[Autoplay, EffectFade]}
-        effect="fade" // Added fade effect for a smoother transition
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
-        loop={true}
-        className="absolute inset-0 h-full w-full z-0"
-      >
-        {images.map((img, index) => (
-          <SwiperSlide key={index}>
-            <div
-              className="h-full w-full bg-cover bg-center filter blur-[1px]"
-              style={{ backgroundImage: `url(${img})` }}
-            >
-              {/* Dark Overlay inside the slide to ensure text is always readable */}
-              <div className="absolute inset-0 bg-black/50"></div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    // 1. Main wrapper for the whole page
+    <main className="min-h-screen flex flex-col bg-base-200">
+      
+      {/* 2. Navbar sits at the top, OUTSIDE the banner */}
+      <Navbar />
 
-      {/* Content Layer */}
-      <div className="absolute inset-0 flex items-center z-20 px-6 lg:px-20">
-        <div className="max-w-4xl">
-          <h2 className="font-bold text-5xl lg:text-6xl text-white leading-[1.1] mb-8 tracking-tight">
-            Discover talent, <br />
-            accept projects, and <br />
-            <span className="text-primary">achieve goals</span> effortlessly.
-          </h2>
-
-          {/* <div className="flex flex-wrap gap-4">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className="group border border-white/30 hover:border-primary px-6 py-3 text-white flex items-center gap-x-3 rounded-full bg-white/5 backdrop-blur-sm hover:bg-primary transition-all duration-300"
+      {/* 3. The Hero/Banner Section (Fixed Height) */}
+      <div className="relative w-full h-[550px] overflow-hidden">
+        
+        {/* Background Slider */}
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          effect="fade"
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
+          loop={true}
+          className="absolute inset-0 h-full w-full z-0"
+        >
+          {images.map((img, index) => (
+            <SwiperSlide key={index}>
+              <div
+                className="h-full w-full bg-cover bg-center filter blur-[1px]"
+                style={{ backgroundImage: `url(${img})` }}
               >
-                <span className="font-medium">{cat}</span>
-                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </button>
-            ))}
-          </div> */}
+                <div className="absolute inset-0 bg-black/50"></div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Content Layer */}
+        <div className="absolute inset-0 flex items-center z-20 px-6 lg:px-20">
+          <div className="max-w-4xl">
+            <h2 className="font-bold text-5xl lg:text-6xl text-white leading-[1.1] mb-8 tracking-tight">
+              Discover talent, <br />
+              accept projects, and <br />
+              <span className="text-primary">achieve goals</span> effortlessly.
+            </h2>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* 4. Footer sits at the bottom, OUTSIDE the banner */}
+      <Footer />
+    </main>
   );
 };
 
-export default Banner;
+export default Home;

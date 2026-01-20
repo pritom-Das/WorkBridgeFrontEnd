@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "@/app/(util)/axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 export default function Profile() {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -57,6 +58,7 @@ const handleDelete = async () => {
   if (loading) return <div className="p-10 text-center"><span className="loading loading-spinner loading-lg"></span></div>;
 return (
     <div>
+      <Navbar />
 
 
       <div className="min-h-screen bg-base-200 p-8" data-theme="light">

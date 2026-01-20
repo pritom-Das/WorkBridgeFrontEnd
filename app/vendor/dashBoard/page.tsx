@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/(util)/axios";
-
-// Interface for type safety (Optional but good practice)
+import Footer from "@/components/footer";  
+// Interface for type safety
 interface Service {
   id: string;
   title: string;
@@ -27,7 +27,6 @@ export default function Dashboard() {
       }
 
       try {
-        // AXIOS REQUEST #5: Get All Services for this Vendor
         const response = await axiosInstance.get(`/vendors/${vendorId}/services`);
         setServices(response.data);
       } catch (error) {
@@ -44,17 +43,18 @@ export default function Dashboard() {
     try {
       await axiosInstance.post('/vendors/logout');
       localStorage.removeItem("vendorId");
-      router.push("/vendor/login");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed", error);
       router.push("/vendor/login");
     }
   };
 
-  return (
-    <div className="min-h-screen bg-base-200"  >
+  return ( 
+    <div className="min-h-screen flex flex-col bg-base-200">
+      
       {/* NAVBAR */}
-      <div className="navbar  shadow-sm text-white" data-theme="dark">
+      <div className="navbar shadow-sm text-white" data-theme="dark">
         <div className="navbar-start">
           <a className="text-3xl px-4 font-bold">Work Bridge</a>
         </div>
@@ -81,9 +81,8 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-
-      {/* MAIN CONTENT - SERVICE CARDS */}
-      <div className="p-8 max-w-7xl mx-auto">
+ 
+      <div className="p-8 max-w-7xl mx-auto w-full flex-grow">
         <h1 className="text-3xl font-bold mb-6 text-gray-700">My Services</h1>
         
         {loading ? (
@@ -110,6 +109,8 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+ 
+      <Footer />
     </div>
   );
 }

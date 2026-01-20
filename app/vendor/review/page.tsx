@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/app/(util)/axios";
@@ -17,8 +19,7 @@ export default function VendorReviewsPage() {
         return;
       }
 
-      try {
-        // Calling the endpoint (ensure backend sends 'orders' relation too)
+      try { 
         const response = await axiosInstance.get(`/vendors/${vendorId}/reviews`);
         setServicesWithReviews(response.data);
       } catch (error) {
@@ -30,14 +31,11 @@ export default function VendorReviewsPage() {
 
     fetchReviews();
   }, [router]);
-
-  // Helper: Check if the reviewer actually bought this service
-  const isVerified = (review: any, serviceOrders: any[]) => {
-    // Safety checks
+ 
+  const isVerified = (review: any, serviceOrders: any[]) => { 
     if (!review.customer || !serviceOrders || serviceOrders.length === 0) {
       return false; 
-    }
-    // Does any order for this service belong to this review's customer?
+    } 
     return serviceOrders.some((order: any) => order.customer?.id === review.customer.id);
   };
 
@@ -73,18 +71,15 @@ export default function VendorReviewsPage() {
                 {/* Reviews List */}
                 <div className="space-y-4">
                   {service.reviews.map((review: any) => {
-                    
-                    // Check verification status for this specific review
+                     
                     const verified = isVerified(review, service.orders);
 
                     return (
                       <div key={review.id} className="bg-base-200 p-4 rounded-xl relative">
-                        
-                        {/* Top Row: Rating, Verified Badge, Date */}
+                         
                         <div className="flex justify-between items-center mb-2">
                           <div className="flex items-center gap-3">
-                            
-                            {/* Stars */}
+                             
                             <div className="flex items-center gap-2">
                               <div className="rating rating-sm">
                                 {[1, 2, 3, 4, 5].map((star) => (
@@ -99,8 +94,7 @@ export default function VendorReviewsPage() {
                               </div>
                               <span className="font-bold text-gray-700">{review.rating}/5</span>
                             </div>
-
-                            {/* Verified Badge (Only shows if true) */}
+ 
                             {verified && (
                               <div className="badge badge-success gap-1 text-white text-xs font-semibold shadow-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-3 h-3 stroke-current">
