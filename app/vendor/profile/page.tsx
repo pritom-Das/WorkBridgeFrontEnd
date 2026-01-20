@@ -9,6 +9,32 @@ export default function VendorProfile() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+   
+const handleDelete = async () => {
+    const vendorId = localStorage.getItem("vendorId");
+    if (!vendorId) return;
+
+    if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+      try { 
+        await axiosInstance.delete(`/vendors/${vendorId}`);
+         
+        try {
+          await axiosInstance.post('/vendors/logout'); 
+        } catch (err) {
+          console.warn("Logout failed (expected since user is deleted)", err);
+        } 
+        localStorage.removeItem("vendorId");
+        localStorage.clear(); 
+        
+        alert("Account deleted successfully.");
+        window.location.href = "/"; 
+      } catch (error) {
+        console.error("Delete failed", error);
+        alert("Failed to delete account. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       const vendorId = localStorage.getItem("vendorId");
@@ -17,8 +43,7 @@ export default function VendorProfile() {
         return;
       }
 
-      try {
-        // AXIOS REQUEST #4: Get Vendor Profile
+      try { 
         const response = await axiosInstance.get(`/vendors/${vendorId}/profile`);
         setProfile(response.data);
       } catch (error) {
@@ -59,17 +84,25 @@ export default function VendorProfile() {
             </div>
 
             <div>
-              <label className="label text-gray-500 font-bold text-sm">Phone Number</label>
-              {/* ⚠️ Access nested profile object */}
+              <label className="label text-gray-500 font-bold text-sm">Phone Number</label> 
               <p className="text-xl">{profile?.profile?.phone || "N/A"}</p>
             </div>
 
             <div>
-              <label className="label text-gray-500 font-bold text-sm">Address</label>
-              {/* ⚠️ Access nested profile object */}
+              <label className="label text-gray-500 font-bold text-sm">Address</label> 
               <p className="text-xl">{profile?.profile?.address || "N/A"}</p>
             </div> 
             
+            {/* 2. Added Delete Button Section */}
+            <div className="mt-8 pt-4 border-t flex justify-end">
+               <button 
+                 className="btn btn-error text-white" 
+                 onClick={handleDelete}
+               >
+                 Delete Account
+               </button>
+            </div>
+
           </div>
         </div>
       </div>

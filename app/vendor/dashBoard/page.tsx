@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/app/(util)/axios";
-import Footer from "@/components/footer"; // 1. Import Footer
-
+import Footer from "@/components/footer";  
 // Interface for type safety
 interface Service {
   id: string;
@@ -51,8 +50,7 @@ export default function Dashboard() {
     }
   };
 
-  return (
-    // 2. LAYOUT FIX: Use 'flex flex-col' so the page behaves like a column
+  return ( 
     <div className="min-h-screen flex flex-col bg-base-200">
       
       {/* NAVBAR */}
@@ -83,8 +81,7 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-
-      {/* 3. CONTENT FIX: Add 'flex-grow' to push the footer down */}
+ 
       <div className="p-8 max-w-7xl mx-auto w-full flex-grow">
         <h1 className="text-3xl font-bold mb-6 text-gray-700">My Services</h1>
         
@@ -112,8 +109,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-
-      {/* 4. FOOTER: Added at the bottom */}
+ 
       <Footer />
     </div>
   );

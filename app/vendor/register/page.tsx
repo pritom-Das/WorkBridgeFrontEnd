@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import axiosInstance from "@/app/(util)/axios";
-import Link from "next/link"; // Added for navigation
+import Link from "next/link";  
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name is too short" }),
@@ -38,28 +38,24 @@ export default function VendorRegister() {
     setError({});
     setServerError("");
 
-    try {
-      // Axios Request #1: Register
+    try { 
       await axiosInstance.post('/vendors', result.data);
       
       alert("Registration Successful! Please Login.");
-      router.push("/vendor/login"); // Redirect to login to get Cookie/ID
+      router.push("/vendor/login");  
 
     } catch (err: any) {
       setServerError(err.response?.data?.message || "An error occurred during registration.");
     }
   };
 
-  return (
-    // Updated classes to match Login Page style (bg-base-200)
+  return ( 
     <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 py-10" data-theme="light">
       
-      <form onSubmit={handleSubmit}>
-        {/* Updated classes to match Login Page style (bg-base-100) */}
+      <form onSubmit={handleSubmit}> 
         <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-80 border p-4 shadow-sm">
           <legend className="fieldset-legend text-2xl font-bold">Vendor Registration</legend>
-
-          {/* Server Error Message */}
+ 
           {serverError && (
             <div className="text-error text-sm text-center mb-2 font-medium">
               {serverError}

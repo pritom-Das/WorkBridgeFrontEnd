@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -55,8 +54,7 @@ export default function VendorPage() {
       <form onSubmit={handleSubmit} className="mt-6">
         <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-80 border p-4 shadow-sm">
           <legend className="fieldset-legend text-2xl font-bold">Login</legend>
-
-          {/* Global Auth Error */}
+ 
           {authError && (
             <div className="text-error text-sm text-center mb-3 font-medium">
               {authError}
