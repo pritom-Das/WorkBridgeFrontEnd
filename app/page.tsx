@@ -20,8 +20,7 @@ const Home = () => {
     // 1. Main wrapper for the whole page
     <main className="min-h-screen flex flex-col bg-base-200">
       
-      {/* 2. Navbar sits at the top, OUTSIDE the banner */}
-      <Navbar />
+ 
 
       {/* 3. The Hero/Banner Section (Fixed Height) */}
       <div className="relative w-full h-[550px] overflow-hidden">
@@ -58,8 +57,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 4. Footer sits at the bottom, OUTSIDE the banner */}
-      <Footer />
+  
     </main>
   );
 };
