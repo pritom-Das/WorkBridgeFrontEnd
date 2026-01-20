@@ -18,7 +18,6 @@ const handleDelete = async () => {
     try {
       // 1. Delete from DB
       await axiosInstance.delete(`/customer/profile/delete/${userId}`);
-      
       // 2. Clear EVERYTHING from localStorage
       localStorage.removeItem("userId");
       localStorage.removeItem("userRole"); // Navbar depends on this!
@@ -60,7 +59,7 @@ return (
     <div>
 
 
-        <div className="min-h-screen bg-base-200 p-8" data-theme="light">
+      <div className="min-h-screen bg-base-200 p-8" data-theme="light">
 
  
       <div className="max-w-2xl mx-auto card bg-base-100 shadow-xl">

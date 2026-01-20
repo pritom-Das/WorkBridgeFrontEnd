@@ -50,7 +50,6 @@ export default function UserPage() {
        else {
         console.warn("Backend did not return an ID. Dashboard requests may fail.");
       }
-
       alert("Login Successful!");
       window.location.href = "/user/service";
     } catch (err: any) {
